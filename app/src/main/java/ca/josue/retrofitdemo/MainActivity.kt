@@ -2,8 +2,8 @@ package ca.josue.retrofitdemo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import retrofit2.Response
@@ -22,6 +22,18 @@ class MainActivity : AppCompatActivity() {
         val response : LiveData<Response<Album>> = liveData {
             val result = albumService.getSortedAlbums(3)
             emit(result)
+        }
+
+        val pathResponse : LiveData<Response<AlbumItem>> = liveData {
+            val result = albumService.getAlbum(3)
+            emit(result)
+        }
+
+        pathResponse.observe(this) {
+            val albumItem = it.body()
+            if (albumItem != null) {
+               Toast.makeText(this, albumItem.title, Toast.LENGTH_SHORT).show()
+            }
         }
 
         response.observe(this) {
