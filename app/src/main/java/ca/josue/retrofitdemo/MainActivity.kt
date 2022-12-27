@@ -21,8 +21,9 @@ class MainActivity : AppCompatActivity() {
             .getRetrofitInstance()
             .create(AlbumService::class.java)
 
-        getRequestWithQueryParameters()
+        //getRequestWithQueryParameters()
         //getRequestWithPathParameters()
+        uploadAlbum()
     }
 
     private fun getRequestWithQueryParameters() {
@@ -61,6 +62,26 @@ class MainActivity : AppCompatActivity() {
             val albumItem = it.body()
             if (albumItem != null) {
                 Toast.makeText(this, albumItem.title, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun uploadAlbum() {
+        val album = AlbumItem(0, "My Title", 3)
+        val postResponse : LiveData<Response<AlbumItem>> = liveData {
+            val result = albumService.uploadAlbum(album)
+            emit(result)
+        }
+
+        postResponse.observe(this) {
+            val receivedAlbumItem = it.body()
+            if (receivedAlbumItem != null) {
+                val result = """
+                    ID: ${receivedAlbumItem.id}
+                    Title: ${receivedAlbumItem.title}
+                    User ID: ${receivedAlbumItem.userId}
+                """.trimIndent()
+                textView.text = result
             }
         }
     }

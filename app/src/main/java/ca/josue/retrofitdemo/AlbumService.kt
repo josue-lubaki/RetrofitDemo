@@ -1,7 +1,9 @@
 package ca.josue.retrofitdemo
 
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -18,4 +20,8 @@ interface AlbumService {
     // https://jsonplaceholder.typicode.com/albums/1
     @GET("/albums/{id}")
     suspend fun getAlbum(@Path("id") albumId : Int): Response<AlbumItem>
+
+    // https://jsonplaceholder.typicode.com/albums
+    @POST("/albums")
+    suspend fun uploadAlbum(@Body album: AlbumItem): Response<AlbumItem>
 }
