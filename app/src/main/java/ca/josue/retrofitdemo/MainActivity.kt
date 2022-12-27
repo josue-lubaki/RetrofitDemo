@@ -13,14 +13,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val text_view = findViewById<TextView>(R.id.text_view)
+        val textView = findViewById<TextView>(R.id.text_view)
 
         val albumService = RetrofitInstance
             .getRetrofitInstance()
             .create(AlbumService::class.java)
 
         val response : LiveData<Response<Album>> = liveData {
-            val result = albumService.getAlbums()
+            val result = albumService.getSortedAlbums(3)
             emit(result)
         }
 
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                     User ID: ${albumItem.userId}
                 """.trimIndent() + "\n\n\n"
 
-                text_view.append(result)
+                textView.append(result)
             }
         }
     }
